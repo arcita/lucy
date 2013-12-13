@@ -1,0 +1,36 @@
+
+
+CREATE TABLE Responses
+(
+Response_ID int PRIMARY KEY,
+response text NOT NULL
+);
+
+CREATE TABLE Favorite_Response(
+UserID varchar(8) NOT NULL,
+Response_ID int NOT NULL,
+FOREIGN KEY (Response_ID) REFERENCES Responses(Response_ID),
+FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Accepted_Responses(
+ID int PRIMARY KEY,
+Sourse_ID int,
+Response_ID int,
+FOREIGN KEY (Sourse_ID) REFERENCES Responses(Response_ID),
+FOREIGN KEY (Response_ID) REFERENCES Responses(Response_ID)
+);
+
+CREATE TABLE History
+(
+UserID varchar(8) NOT NULL,
+ResponseID int NOT NULL,
+time_stamp datetime PRIMARY KEY,
+FOREIGN KEY (UserID) REFERENCES Users(UserID),
+FOREIGN KEY (ResponseID) REFERENCES Responses(Response_ID)
+);
+
+CREATE TABLE Banned
+(
+Bannedtext text PRIMARY KEY
+);

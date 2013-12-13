@@ -1,0 +1,512 @@
+<?php
+
+
+/*
+  ___  _   _  ____  ___  _  _      __    ____  __  __  ____  _  _ 
+ / __)( )_( )( ___)/ __)( )/ )    /__\  (  _ \(  \/  )(_  _)( \( )
+( (__  ) _ (  )__)( (__  )  (    /(__)\  )(_) ))    (  _)(_  )  ( 
+ \___)(_) (_)(____)\___)(_)\_)  (__)(__)(____/(_/\/\_)(____)(_)\_)
+ 
+ */
+
+function checkAdmin($userID){
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Users WHERE UserID = '" . $userID . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	if($result->num_rows!= 0){
+		while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+			$isAdmin = $row['is_admin'];
+		}
+	}	
+
+	return $isAdmin;
+}
+
+/*
+   __    ____  ____     __  __  ___  ____  ____ 
+  /__\  (  _ \(  _ \   (  )(  )/ __)( ___)(  _ \
+ /(__)\  )(_) ))(_) )   )(__)( \__ \ )__)  )   /
+(__)(__)(____/(____/   (______)(___/(____)(_)\_)
+
+*/
+
+function addUser($name,$password,$birthdate)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+
+	$query = "INSERT INTO Users ('Password','Birthdate') Values ('" . $password . "','" . $birthdate . "')"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+	
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $result;
+}
+
+/*
+  ___  _   _  ____  ___  _  _    ____  ____  ___  ____  __      __   _  _    _  _    __    __  __  ____ 
+ / __)( )_( )( ___)/ __)( )/ )  (  _ \(_  _)/ __)(  _ \(  )    /__\ ( \/ )  ( \( )  /__\  (  \/  )( ___)
+( (__  ) _ (  )__)( (__  )  (    )(_) )_)(_ \__ \ )___/ )(__  /(__)\ \  /    )  (  /(__)\  )    (  )__) 
+ \___)(_) (_)(____)\___)(_)\_)  (____/(____)(___/(__)  (____)(__)(__)(__)   (_)\_)(__)(__)(_/\/\_)(____)
+ 
+ */
+
+function checkDisplayNameExists($userName)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Screen_Name WHERE Screen_Name = '" . $userName . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $result->num_rows;
+}
+
+/*
+  ___  ____  ____    _  _    __    __  __  ____ 
+ / __)( ___)(_  _)  ( \( )  /__\  (  \/  )( ___)
+( (_-. )__)   )(     )  (  /(__)\  )    (  )__) 
+ \___/(____) (__)   (_)\_)(__)(__)(_/\/\_)(____)
+ 
+ */
+
+function GetDisplayName($userName)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Screen_Name WHERE UserID = '" . $userName . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	if($result->num_rows!= 0){
+		while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+			$ScreenName = $row['Screen_Name'];
+		}
+	}	
+
+	return $ScreenName;
+}
+
+/*
+  ___  _   _  ____  ___  _  _    __    _____  ___  ____  _  _    _  _    __    __  __  ____ 
+ / __)( )_( )( ___)/ __)( )/ )  (  )  (  _  )/ __)(_  _)( \( )  ( \( )  /__\  (  \/  )( ___)
+( (__  ) _ (  )__)( (__  )  (    )(__  )(_)(( (_-. _)(_  )  (    )  (  /(__)\  )    (  )__) 
+ \___)(_) (_)(____)\___)(_)\_)  (____)(_____)\___/(____)(_)\_)  (_)\_)(__)(__)(_/\/\_)(____)
+ 
+ */
+
+function checkloginNameExists($userName)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Users WHERE UserID = '" . $userName . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $result->num_rows;
+}
+
+/*
+  ___  _   _    __    _  _  ___  ____    _  _    __    __  __  ____ 
+ / __)( )_( )  /__\  ( \( )/ __)( ___)  ( \( )  /__\  (  \/  )( ___)
+( (__  ) _ (  /(__)\  )  (( (_-. )__)    )  (  /(__)\  )    (  )__) 
+ \___)(_) (_)(__)(__)(_)\_)\___/(____)  (_)\_)(__)(__)(_/\/\_)(____)
+
+*/
+
+function changeUserName($userName,$screenName)
+{
+	$nameExists = checkDisplayNameExists($screenName);
+
+	if($nameExists){
+		return false;
+	}
+
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+	$query = "UPDATE Screen_Name SET Screen_Name = '" . $screenName . "' WHERE UserID = '" . $userName . "'";
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $result ? true : false;
+}
+
+/*
+ __    __  __  ___  _  _    ____  ____  ___  ____  _____  _  _  ___  ____ 
+(  )  (  )(  )/ __)( \/ )  (  _ \( ___)/ __)(  _ \(  _  )( \( )/ __)( ___)
+ )(__  )(__)(( (__  \  /    )   / )__) \__ \ )___/ )(_)(  )  ( \__ \ )__) 
+(____)(______)\___) (__)   (_)\_)(____)(___/(__)  (_____)(_)\_)(___/(____)
+
+*/
+
+function LucyResponse($response)
+{
+	$source = 0;
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT Response_ID FROM Responses WHERE response = '" . $response . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+		$source = $row['Response_ID'];
+	}
+
+	$query = "SELECT Response_ID FROM Accepted_Responses WHERE Sourse_ID = $source AND Accepted = 1 ORDER BY RAND() LIMIT 0,1"; 
+	$result = mysqli_query($connection,$query);
+	if ($result->num_rows < 1) {
+		return "I don't understand.";		// no valid response found
+	}
+	while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+		$source = $row['Response_ID'];
+	}
+
+	$gimmi = "nothing";
+	$query = "SELECT response FROM Responses WHERE Response_ID =  $source"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+	while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+		$gimmi = $row['response'];
+	}
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $gimmi;
+}
+
+/*
+ ____  ____  ___  ____  _____  _  _  ___  ____    ____  _  _  ____  ___  ____  ___ 
+(  _ \( ___)/ __)(  _ \(  _  )( \( )/ __)( ___)  ( ___)( \/ )(_  _)/ __)(_  _)/ __)
+ )   / )__) \__ \ )___/ )(_)(  )  ( \__ \ )__)    )__)  )  (  _)(_ \__ \  )(  \__ \
+(_)\_)(____)(___/(__)  (_____)(_)\_)(___/(____)  (____)(_/\_)(____)(___/ (__) (___/
+
+*/
+
+function checkResponseExists($response)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Responses WHERE response = '" . $response . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	if ($result->num_rows == 0)
+		return false;
+	else
+		return $result ? true : false;
+}
+
+/*
+   __    ____  ____     ____  ____  ___  ____  _____  _  _  ___  ____ 
+  /__\  (  _ \(  _ \   (  _ \( ___)/ __)(  _ \(  _  )( \( )/ __)( ___)
+ /(__)\  )(_) ))(_) )   )   / )__) \__ \ )___/ )(_)(  )  ( \__ \ )__) 
+(__)(__)(____/(____/   (_)\_)(____)(___/(__)  (_____)(_)\_)(___/(____)
+
+*/
+
+function add_response($user_response) 
+{
+	//if Lucy provided a response, it needs to be passed to this function as well and then used to tie the user response to the sourse ID.
+
+	//check if LUCY resposne session value exists
+	//	$Lucys_last_response_ID = session value
+	//else
+	//	create new LUCY resposne session value with value of -1
+
+
+	$Lucys_last_response_ID = -1;
+	if($_SESSION['LucyMemory'])
+		$Lucys_last_response_ID = $_SESSION['LucyMemory'];
+
+	$response_exists = checkResponseExists($user_response);
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$return_text = "I don't understand";
+
+	if ($response_exists) {
+		$query = "UPDATE `Responses` SET `value` = value + 1 WHERE `response` ='".$user_response."';"; 
+		$result = mysqli_query($connection,$query);
+		$return_text = LucyResponse($user_response);
+	}
+	else {
+		$query = "INSERT INTO Responses Values (NULL, '".$user_response."', 1)"; //You don't need a ; like you do in SQL
+		$result = mysqli_query($connection,$query);
+	}
+
+	// get user created response ID
+	$query = "SELECT Response_ID FROM Responses WHERE response = '" . $user_response . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+	$responding_ID = 0;
+	while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+		$responding_ID = $row['Response_ID'];
+	}
+
+	// get lucy response ID
+	$query = "SELECT Response_ID FROM Responses WHERE response = '" . $return_text . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+	$Lucy_Current_Response_ID = -1;
+	if($result->num_rows!= 0){
+		while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+			$Lucy_Current_Response_ID = $row['Response_ID'];
+		}
+	}
+	$test = $return_text;
+	//$return_text = $return_text . "<br>LLRID: " . $Lucys_last_response_ID;
+	//$return_text = $return_text . "<br>LCRID: " . $Lucy_Current_Response_ID;
+
+	// then add a new entery to accepted_responses matching the lucy sourse ID to the responding_ID
+	if ($Lucys_last_response_ID >= 0) {	//if you are responding to LUCY
+		//make sure it doesnt already exist
+		$query = "SELECT * FROM Accepted_Responses WHERE Sourse_ID=$Lucys_last_response_ID AND Response_ID =$responding_ID";
+		$result = mysqli_query($connection,$query);
+		//$return_text = $return_text . "<br>checking valid response <br>";
+		if ($result->num_rows == 0) {	//relation does not yet exist, Adds response as accepted
+			$query = "INSERT INTO Accepted_Responses Values (NULL,$Lucys_last_response_ID, $responding_ID, 0, 1)"; 
+			$result = mysqli_query($connection,$query);
+			//$return_text = $return_text . "Added <br>" .  $result;
+		}
+		else {	// If relation already exists, increment its value
+			$query = "UPDATE `Accepted_Responses` SET `value` = value + 1 WHERE Sourse_ID=$Lucys_last_response_ID AND Response_ID =$responding_ID"; 
+			$result = mysqli_query($connection,$query);
+			//add
+			//if updated response value > tolerance, set to accepted
+			$tolerance = 3; //default
+			$query = "SELECT * FROM Variables";
+			$result = mysqli_query($connection,$query);
+			while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+				$tolerance=$row['accept_response_tolerance'];	//set tolerance to grabbed value
+			}
+			$query = "UPDATE Accepted_Responses SET Accepted=1 WHERE value > $tolerance";
+			$result = mysqli_query($connection,$query);
+			//
+		}
+	}
+	//if $response_exists
+	//	set LUCY resposne session value to $responding_ID
+	//else
+	//	set LUCY resposne session value to -1
+	if($test != "I don't understand"){
+		$_SESSION['LucyMemory'] = $Lucy_Current_Response_ID;
+		//$return_text = $return_text . "<br>SeT MEMORY";
+	}
+	else	
+		$_SESSION['LucyMemory'] = -1;
+	
+	//if $_SESSION['LucyMemory'] == -1, pick a random phrase and set memory to its id.
+	if ($_SESSION['LucyMemory'] == -1 and rand(0,10) > 6) {
+		$query = "SELECT * FROM Responses WHERE value > 3 ORDER BY RAND() LIMIT 0,1"; 
+		$result = mysqli_query($connection,$query);
+		$g_id = -1;
+		$g_text = "I don't understand...<br>What about...<br>";	
+		while($row = mysqli_fetch_array($result)) {	// very poor way to grab value
+			$g_id = $row['Response_ID'];
+			$g_text = $g_text . $row['response'];
+		}
+		$return_text = $g_text;
+		$_SESSION['LucyMemory'] = $g_id;
+	}
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	return $return_text; //return $return_text . "<br> Lucy Memory: " . $_SESSION['LucyMemory'];
+}
+
+/*
+  ___  _   _  ____  ___  _  _    ____    __    _  _  _  _  ____  ____  
+ / __)( )_( )( ___)/ __)( )/ )  (  _ \  /__\  ( \( )( \( )( ___)(  _ \ 
+( (__  ) _ (  )__)( (__  )  (    ) _ < /(__)\  )  (  )  (  )__)  )(_) )
+ \___)(_) (_)(____)\___)(_)\_)  (____/(__)(__)(_)\_)(_)\_)(____)(____/ 
+
+*/
+
+function checkBannedResponseExists($response)
+{
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+
+	$query = "SELECT * FROM Banned_Phrases WHERE BannedPhrase = '" . $response . "'"; //You don't need a ; like you do in SQL
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+	if ($result->num_rows == 0)
+		return false;
+	else
+		return $result ? true : false;
+}
+
+/*
+ ____  ____  __   ____  ____  ____    ____  _  _  ____  __  __  ____ 
+( ___)(_  _)(  ) (_  _)( ___)(  _ \  (_  _)( \( )(  _ \(  )(  )(_  _)
+ )__)  _)(_  )(__  )(   )__)  )   /   _)(_  )  (  )___/ )(__)(   )(  
+(__)  (____)(____)(__) (____)(_)\_)  (____)(_)\_)(__)  (______) (__) 
+
+*/
+
+function filterInput($response)
+{
+	if (checkBannedResponseExists($response)) {
+		return true;
+	}
+	//check individual words
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+	$query = "SELECT * FROM Banned";
+	$result = mysqli_query($connection,$query);
+
+	mysqli_close($connection); //Make sure to close out the database connection
+
+	while($row = mysqli_fetch_array($result)) {
+		$word = $row['Bannedtext'];
+		if (strpos($response, $word) !== FALSE) {
+	    		return true;
+		}
+	}
+
+	return false;
+}
+
+/*
+ __    _____  ___  ____  _  _ 
+(  )  (  _  )/ __)(_  _)( \( )
+ )(__  )(_)(( (_-. _)(_  )  ( 
+(____)(_____)\___/(____)(_)\_)
+
+*/
+
+function login($username, $password){
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+	$query = "SELECT * FROM Users WHERE UserID='" . $username . "' AND Password='" .$password . "'";
+
+	$result = mysqli_query($connection,$query);
+	
+	mysqli_close($connection); //Make sure to close out the database connection
+
+	return $result->num_rows;
+	/*if($result->num_rows == 1){
+		return true;
+	}
+	
+	return false;*/
+}
+
+/*
+  ___  ____  ____    __   ____  ____    __  __  ___  ____  ____ 
+ / __)(  _ \( ___)  /__\ (_  _)( ___)  (  )(  )/ __)( ___)(  _ \
+( (__  )   / )__)  /(__)\  )(   )__)    )(__)( \__ \ )__)  )   /
+ \___)(_)\_)(____)(__)(__)(__) (____)  (______)(___/(____)(_)\_)
+
+*/
+
+function createUser($username, $password, $displayname, $birthdate){
+	$connection = mysqli_connect('localhost','root','root');
+	mysqli_select_db($connection,'Lucy');
+	// Insert User into Users Table
+	$query = "INSERT INTO Users VALUES ('" . $username . "', '" . sha1 ($password) . "','" . $birthdate . "',0)";
+	$result = mysqli_query($connection,$query);
+	
+	mysqli_close($connection); //Make sure to close out the database connection
+
+	if($result){
+		$connection = mysqli_connect('localhost','root','root');
+		mysqli_select_db($connection,'Lucy');
+		$query = "INSERT INTO Screen_Name (UserID, Screen_Name) VALUES('" . $username . "', '" . $displayname . "')";
+		$result2 = mysqli_query($connection,$query);
+		
+		mysqli_close($connection); //Make sure to close out the database connection
+
+		if($result2){
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+/*
+ __  __  _____  _  _  ___  _____ 
+(  \/  )(  _  )( \( )/ __)(  _  )
+ )    (  )(_)(  )  (( (_-. )(_)( 
+(_/\/\_)(_____)(_)\_)\___/(_____)
+
+*/
+
+function add_mongo($user, $change)
+{
+
+  return "Mongo Not working<br>";
+
+	try {
+	  // open connection to MongoDB server
+	  $conn = new Mongo('localhost');
+	  // access database
+	  $db = $conn->test;
+
+	  // access collection
+	  $collection = $db->changeLog;
+
+	// insert a new document
+	  $item = array(
+	    'user' => $user,
+	    'change' => $change,
+	    'date' => date('Y-m-d H:i'),
+	  );
+	  $collection->insert($item);
+	  echo 'Inserted document with ID: ' . $item['_id'] . "\n";
+	  
+	  // disconnect from server
+	  $conn->close();
+	} catch (MongoConnectionException $e) {
+	  die('Error connecting to MongoDB server');
+	} catch (MongoException $e) {
+	  die('Error: ' . $e->getMessage());
+	}
+}
+
+function list_mongo()
+{
+  try {
+	  // open connection to MongoDB server
+	  $conn = new Mongo('localhost');
+
+	  // access database
+	  $db = $conn->test;
+
+	  // access collection
+	  $collection = $db->changeLog;
+
+	 // execute query
+	  // retrieve all documents
+	  $cursor = $collection->find();
+
+	  // iterate through the result set
+	  // print each document
+	  $break = "<br>";
+	  $str = '';
+	  echo $cursor->count() . ' document(s) found.' . $break;  
+	  foreach ($cursor as $obj) {
+	    $str = $str . 'User: ' . $obj['user'] . ' ';
+	    $str = $str . '  on ' . $obj['date'] . $break;
+	    $str = $str . 'change: ' . $obj['change'] . ' ';
+	    $str = $str . $break . $break;
+	  }
+
+	  // disconnect from server
+	  $conn->close();
+	} catch (MongoConnectionException $e) {
+	  die('Error connecting to MongoDB server');
+	} catch (MongoException $e) {
+	  die('Error: ' . $e->getMessage());
+	}
+		//this is the return text
+	  return $str;
+}
+// to DO:
+// make admin metho do move a response to banned_phrases
+?>

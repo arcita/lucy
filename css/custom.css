@@ -1,0 +1,67 @@
+/*
+ _   _  ____    __    ____  ____  ____ 
+( )_( )( ___)  /__\  (  _ \( ___)(  _ \
+ ) _ (  )__)  /(__)\  )(_) ))__)  )   /
+(_) (_)(____)(__)(__)(____/(____)(_)\_)
+                                       
+*/
+
+#title
+{    width:320px;
+    left:0;
+    height:auto;
+}
+
+nav ul{
+  float:right;
+}
+/*
+ ____  _____  ____  _  _ 
+(  _ \(  _  )(  _ \( \/ )
+ ) _ < )(_)(  )(_) )\  / 
+(____/(_____)(____/ (__) 
+                         
+*/
+
+#content{
+  width:900px;
+  margin:0 auto;
+}
+
+/*
+  ___  _   _    __   ____ 
+ / __)( )_( )  /__\ (_  _)
+( (__  ) _ (  /(__)\  )(  
+ \___)(_) (_)(__)(__)(__) 
+
+ */
+
+ .chatLocation{
+  margin:0 auto;
+  width:300px;
+ }
+
+#conversation{
+  max-height:250px;
+  background-color:blue;
+}
+
+ #chatsector{
+  padding-bottom:100px;
+ }
+
+
+ /*
+ ___  ____  _____  ____  __    ____  ____ 
+/ __)(  _ \(  _  )(_  _)(  )  ( ___)(  _ \
+\__ \ )___/ )(_)(  _)(_  )(__  )__)  )   /
+(___/(__)  (_____)(____)(____)(____)(_)\_)
+
+ */
+
+ /* animated spoiler CSS by Bloggersentral.com */
+.spoilerbutton {display:block;margin:5px 0;}
+.spoiler {overflow:hidden;}
+.spoiler > div {-webkit-transition: all 0.2s ease;-moz-transition: margin 0.2s ease;-o-transition: all 0.2s ease;transition: margin 0.2s ease;}
+.spoilerbutton[value="Show"] + .spoiler > div {margin-top:-100%;}
+.spoilerbutton[value="Hide"] + .spoiler {padding:5px;} 
